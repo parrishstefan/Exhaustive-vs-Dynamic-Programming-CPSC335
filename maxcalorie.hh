@@ -238,10 +238,14 @@ std::unique_ptr<FoodVector> filter_food_vector
 	}
 	
 	std::unique_ptr<FoodVector> newFood(new FoodVector);
+
+	for ( auto & foods : source) {
+        if(foods->foodCalories() > 0 && foods->foodCalories() >= min_calories && foods->foodCalories() <= max_calories && newFood->size() < total_size) {
+            newFood->push_back(foods);
+        }
+    }
 	
-    
-// TODO: implement this function, then delete the return statement below
-return nullptr;
+	return newFood;
 }
 
 // Compute the optimal set of food items with a exhaustive search algorithm.
@@ -255,13 +259,42 @@ std::unique_ptr<FoodVector> exhaustive_max_calories
 	double total_weight
 )
 {
+	double candidateWeight;
+    double candidateCalories;
+    double bestCalories;
+    double bestWeight;
 
 	const int n = foods.size();
 	assert(n < 64);
-	std::unique_ptr<FoodVector> best(new FoodVector);
-	std::unique_ptr<FoodVector> candidate(new FoodVector);
-// TODO: implement this function, then delete the return statement below
-return nullptr;
+ 	
+    
+    // 2^(size of foods)
+    int nSquared = pow(2, n);
+    
+    // Optimal vector for foods
+    std::unique_ptr<FoodVector> best (new FoodVector);
+   
+    for (int i = 0; i < nSquared; i++) {
+        // Possible vector to compare with
+        std::unique_ptr<FoodVector> candidate (new FoodVector);
+        for (int j = 0; j < foods.size(); j++) {
+            if (((i >> j) & 1) == 1)
+                // Adds possible foods to candidate
+                candidate->push_back(foods[j]);
+        }
+        
+        // Returns the total weight and calories
+        sum_food_vector(*candidate, candidateWeight, candidateCalories);
+        sum_food_vector(*best, bestWeight, bestCalories);
+        
+        // If weight isn't exceeded and optimal calories
+        // give candidate foods to best
+        if (candidateWeight <= total_weight)
+            if (best->empty() || candidateCalories > bestCalories)
+                *best = *candidate;
+    }
+    
+    return best;
 
 }
 
@@ -281,6 +314,7 @@ std::unique_ptr<FoodVector> dynamic_max_calories
 	std::unique_ptr<FoodVector> best(new FoodVector);
 	
     // TODO: implement this function, then delete the return statement below
+	
 return nullptr;
 
    //print_food_vector(*best);
