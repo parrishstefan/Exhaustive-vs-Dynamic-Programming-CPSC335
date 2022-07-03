@@ -13,7 +13,6 @@
 #include "maxcalorie.hh"
 #include "rubrictest.hh"
 
-
 int main()
 {
 	Rubric rubric;
@@ -121,8 +120,7 @@ int main()
 			calories_small	= std::round( calories_small	* 100 ) / 100;
 			weight_large	= std::round( weight_large	* 100 ) / 100;
 			calories_large	= std::round( calories_large	* 100 ) / 100;
-			
-			TEST_EQUAL("Small solution weight",	500,	weight_small);
+			TEST_EQUAL("Small solution weight",	500, weight_small);
 			TEST_EQUAL("Small solution calories", 9564.92,	calories_small);
 			TEST_EQUAL("Large solution weight",	5000,	weight_large);
 			TEST_EQUAL("Large solution calories", 82766.449999999997,	calories_large);

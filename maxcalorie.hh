@@ -50,7 +50,9 @@ class FoodItem
 	
 	//
 	private:
-		
+		 int max(int a, int b) {
+	return (a > b) ? a : b;
+}
 		// Human-readable description of the food, e.g. "spicy chicken breast". Must be non-empty.
 		std::string _description;
 		
@@ -306,17 +308,48 @@ std::unique_ptr<FoodVector> exhaustive_max_calories
 std::unique_ptr<FoodVector> dynamic_max_calories
 (
 	const FoodVector& foods,
-	double total_weight
+	int total_weight
 )
+
 {
-    std::vector<std::vector<double>> T;
-	std::unique_ptr<FoodVector> source(new FoodVector(foods));
+	int n = foods.size();
+	int W = total_weight;
+
+    std::vector<std::vector<double>> K(n + 1, std::vector<double>(W + 1));
 	std::unique_ptr<FoodVector> best(new FoodVector);
-	
-    // TODO: implement this function, then delete the return statement below
-	
-return nullptr;
+      
+    // Build table K[][] in bottom up manner
+    for(int i = 0; i <= n; i++)
+    {
+        for(int w = 0; w <= W; w++)
+        {
+            if (i == 0 || w == 0)
+                K[i][w] = 0;
+            else if (foods[i - 1]->weight() <= w) {
+                K[i][w] = std::max(foods[i - 1]->foodCalories() + K[i - 1][w - foods[i - 1]->weight()], K[i - 1][w]);
+		    }
+            else {
+                K[i][w] = K[i - 1][w];
+			}
+        }
+    }
 
-   //print_food_vector(*best);
+    int w = total_weight;
 
+    for (int i = n; i > 0; i--) {
+        // Either the result comes from the top, K[i-1][w], or from (val[i-1] + K[i-1] [w-wt[i-1]])
+        // as in the Knapsack table. If it comes from the latter, the item is included.
+        if (K[i][w] == K[i - 1][w])
+            continue;   
+        else {
+            best->push_back(foods[i - 1]);
+
+            // Since this weight is included, its value is deducted.
+            w -= foods[i - 1]->weight();
+        }
+    }
+
+  return best;
 }
+
+//
