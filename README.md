@@ -3,6 +3,7 @@ Project 4
 
 Group members:
 
-Ada Lovelace adalovelace@csu.fullerton.edu
+Stefan Parrish parrishstefan@csu.fullerton.edu
 
-Charles Babbage charlesbab@csu.fullerton.edu
+Alex Lu alexluc2001@csu.fullerton.edu
+
